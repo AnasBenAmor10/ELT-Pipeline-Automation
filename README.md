@@ -1,21 +1,40 @@
-# ELT-Pipeline-Automation
+# ELT Pipeline Automation with dbt, Snowflake, and Airflow
 
+## Overview
 
-This project demonstrates how to build a complete ELT (Extract, Load, Transform) pipeline leveraging **dbt**, **Snowflake**, and **Airflow**. The pipeline integrates modern data stack tools and practices to transform raw data into structured data models, ready for analytics and reporting.
+The goal of this project is to create a modern, efficient, and reusable ELT pipeline that extracts raw data, applies transformations, and loads the results into Snowflake for analytics and business intelligence purposes. By leveraging **dbt** for transformations and **Airflow** for orchestration, this pipeline ensures scalability, modularity, and maintainability.
+
+---
+
+## Features
+
+- **Source Configuration**: Integration with Snowflake’s sample data (TPCH schema).
+- **dbt Transformations**: Creation of staging and mart models with reusable macros for maintainability.
+- **Airflow Orchestration**: Scheduling and monitoring pipeline execution.
+- **Data Quality Assurance**: Implementation of generic and singular tests to ensure data reliability.
+- **Automation**: End-to-end pipeline that runs on a daily schedule in Airflow.
 
 ---
 
-## **Project Overview**  
+## Architecture
 
-The pipeline implements the following steps:  
+### **Tools and Technologies**  
 
-1. **Setup and Configuration**: Setting up the Snowflake environment and configuring dbt profiles.  
-2. **Source and Staging**: Creating source definitions and staging models.  
-3. **Transformations**: Implementing intermediate tables, fact models, and data marts using dbt.  
-4. **Testing**: Adding generic and singular tests for quality assurance.  
-5. **Orchestration**: Deploying the pipeline using Airflow, enhanced with Astronomer's Cosmos library for dbt integration.  
+- **Snowflake**: Cloud-based data warehouse for storing and querying data.  
+- **dbt (Data Build Tool)**: For data transformations and modeling.  
+- **Airflow**: Workflow orchestration for scheduling and monitoring pipelines.  
+- **Astronomer Cosmos**: Integration library for dbt and Airflow.  
+
+### **Pipeline Workflow**  
+
+1. **Data Source**: Extract data from `snowflake_sample_data.tpch_sf1` tables (`orders` and `lineitem`).  
+2. **Staging Models**: Clean and prepare data in Snowflake using dbt staging models.  
+3. **Transformations**: Create intermediate tables, data marts, and fact tables for analytics.  
+4. **Testing**: Validate data using dbt's generic and custom tests.  
+5. **Orchestration**: Automate the pipeline using Airflow and monitor its execution.
 
 ---
+
 
 ## **Directory Structure**  
 
@@ -43,25 +62,6 @@ Dockerfile
 
 
 ```
-
----
-
-## **Architecture**  
-
-### **Tools and Technologies**  
-
-- **Snowflake**: Cloud-based data warehouse for storing and querying data.  
-- **dbt (Data Build Tool)**: For data transformations and modeling.  
-- **Airflow**: Workflow orchestration for scheduling and monitoring pipelines.  
-- **Astronomer Cosmos**: Integration library for dbt and Airflow.  
-
-### **Pipeline Workflow**  
-
-1. **Data Source**: Extract data from `snowflake_sample_data.tpch_sf1` tables (`orders` and `lineitem`).  
-2. **Staging Models**: Clean and prepare data in Snowflake using dbt staging models.  
-3. **Transformations**: Create intermediate tables, data marts, and fact tables for analytics.  
-4. **Testing**: Validate data using dbt's generic and custom tests.  
-5. **Orchestration**: Automate the pipeline using Airflow and monitor its execution.
 
 ---
 
@@ -204,6 +204,40 @@ dbt_dag = DbtDag(
     dag_id="dbt_dag",
 )
 ```
+### Initialize Astronomer Dev Environment
+Astronomer Cosmos makes it easy to integrate dbt with Airflow. Follow these steps to set up and launch the project:
+
+1. **Install Astronomer CLI**  
+   Follow [this guide](https://www.astronomer.io/docs/astro/cli/install-cli) to install the Astronomer CLI.
+
+2. **Initialize the Dev Environment**  
+   Run the following command to initialize the Astronomer development environment:
+   ```bash
+   astro dev init
+   ```
+
+3. **Start the Astronomer Development Environment**  
+   Launch the environment:
+   ```bash
+   astro dev start
+   ```
+
+4. **Access the Airflow UI**  
+   Once the environment starts, the Airflow UI will be available at `http://localhost:8080`.
+
+### **2. Configure Snowflake Connection**
+1. Add your Snowflake connection details to the Airflow UI:
+   ```json
+   {
+     "account": "<account_locator>-<account_name>",
+     "warehouse": "dbt_wh",
+     "database": "dbt_db",
+     "role": "dbt_role",
+     "insecure_mode": false
+   }
+   ```
+
+2. Define your `dbt_profile.yml` to connect dbt with Snowflake.
 
 ---
 
@@ -230,6 +264,14 @@ For detailed documentation, refer to the [Astronomer Cosmos Official Documentati
 By following these resources, you can effectively integrate dbt with Airflow and streamline your data pipeline workflows with Astronomer Cosmos.
 
 ## Pipeline Success
+## **Capture: Successful Pipeline Execution**
+
+Once the pipeline runs successfully in Airflow, you can capture the result by taking a screenshot of the **Airflow DAG** in the "Success" state. Follow these steps:
+
+1. Open the Airflow UI (`http://localhost:8080`).
+2. Navigate to your DAG (`dbt_dag`).
+3. Trigger the DAG and wait for it to complete.
+
 
 Below is a screenshot of the successful execution of the pipeline in Airflow:
 
