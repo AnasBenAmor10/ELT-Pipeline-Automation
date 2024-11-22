@@ -197,7 +197,7 @@ RUN python -m venv dbt_venv && source dbt_venv/bin/activate && \
 from cosmos import DbtDag
 
 dbt_dag = DbtDag(
-    project_config=ProjectConfig("/usr/local/airflow/dags/dbt/data_pipeline"),
+    project_config=ProjectConfig("/usr/local/airflow/dags/dbt/ELT_Pipeline"),
     schedule_interval="@daily",
     start_date=datetime(2023, 9, 10),
     catchup=False,
